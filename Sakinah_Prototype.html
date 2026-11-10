@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sakinah: Prototipe Pendamping Kesehatan Mental Islami</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Amiri&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0D2A28;--bg2:#0A1F1E;--card:#163F3B;--card2:#1E4A46;--line:#2F6B64;--text:#F5EFE0;--muted:#B9D0C8;--gold:#E8C27A;--ink:#0D2A28;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0D2A28;--card:#163F3B;--text:#F5EFE0}}
+:root[data-theme="dark"]{--bg:#0D2A28}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:#071817;font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:var(--text);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
+.note{font-size:12px;color:var(--muted);text-align:center;max-width:390px;padding:0 12px}
+.phone{width:390px;height:min(844px,100%);max-height:844px;background:var(--bg);border-radius:36px;overflow:hidden;position:relative;display:flex;flex-direction:column;border:1px solid var(--line)}
+@media (max-width:480px){.phone{width:100%;height:100%;max-height:none;border-radius:0;border:0}.note{display:none}body{justify-content:flex-start}}
+.screen{display:none;flex:1;overflow-y:auto;padding:60px 20px 12px;flex-direction:column;gap:16px}
+.screen.on{display:flex}
+.h{font-size:26px;font-weight:800;line-height:1.2;margin:0}
+.m{color:var(--muted);font-size:13px;line-height:1.5}
+.g{color:var(--gold)}
+.ar{font-family:'Amiri',serif;direction:rtl;color:var(--gold);line-height:1.9;font-size:26px}
+.c{background:var(--card);border-radius:24px;padding:18px;border:0;color:var(--text);font:inherit;text-align:left;width:100%}
+button{font-family:inherit}
+.b{border:0;cursor:pointer;min-height:48px;border-radius:16px;padding:0 16px;font-weight:700;color:var(--ink);background:var(--gold);width:100%;font-size:15px}
+.b2{background:var(--card2);color:var(--text)}
+.chip{border:1px solid var(--line);background:transparent;color:var(--text);font-size:13px;min-height:44px;border-radius:22px;padding:0 14px;cursor:pointer}
+.chip.sel,.chip:hover{border-color:var(--gold);color:var(--gold)}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tap{cursor:pointer}.tap:hover{background:var(--card2)}
+.mode.sel{outline:2px solid var(--gold)}
+.nav{display:flex;justify-content:space-around;background:var(--card);border-radius:28px;margin:8px 12px 12px;padding:6px}
+.nav button{border:0;background:transparent;color:var(--muted);font-size:11px;min-height:48px;min-width:60px;cursor:pointer}
+.nav button.on{color:var(--gold);font-weight:700}
+.sos{position:absolute;top:12px;right:16px;z-index:5;border:1px solid var(--gold);color:var(--gold);background:var(--bg);font-size:12px;font-weight:700;min-height:44px;border-radius:22px;padding:0 14px;cursor:pointer}
+.bub{padding:14px 16px;max-width:86%;line-height:1.5;font-size:14px;animation:in .3s}
+.ai{background:var(--card);border-radius:20px 20px 20px 6px;align-self:flex-start}
+.me{background:var(--gold);color:var(--ink);border-radius:20px 20px 6px 20px;align-self:flex-end}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.inp{display:flex;gap:8px;align-items:center;background:var(--card);border-radius:28px;padding:6px 6px 6px 18px;margin:0 12px}
+.inp input{flex:1;background:transparent;border:0;color:var(--text);font:inherit;font-size:14px;min-height:44px;outline:none}
+.inp button{width:44px;min-height:44px;padding:0;border-radius:22px}
+.orb{width:180px;height:180px;border-radius:50%;background:var(--card2);border:2px solid var(--gold);margin:12px auto;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:700;transition:transform 4s ease-in-out}
+.orb.big{transform:scale(1.35)}
+.crisis{background:var(--bg2)}
+.x{font-size:12px;color:var(--muted);text-decoration:underline;background:none;border:0;cursor:pointer;min-height:44px}
+</style>
+</head>
+<body>
+<div class="note">Prototipe demo untuk penilaian. Balasan AI di sini disimulasikan; nomor darurat masih placeholder.</div>
+<div class="phone" id="phone">
+<button class="sos" onclick="go('crisis')" aria-label="Butuh bantuan sekarang">Butuh bantuan</button>
+
+<section class="screen on" id="onb">
+<div style="text-align:center;margin-top:12px"><div class="ar" style="font-size:34px">بِسْمِ اللَّهِ</div>
+<h1 class="h" style="margin-top:8px">Kamu mau<br>ditemani seperti apa?</h1>
+<div class="m" style="margin-top:8px">Bisa diganti kapan saja. Tanpa dihakimi.</div></div>
+<button class="c tap mode" data-m="umum"><b>Umum</b><div class="m">Napas, jurnal, dan latihan tenang tanpa unsur agama.</div></button>
+<button class="c tap mode" data-m="ringan"><b>Islami ringan</b><div class="m">Ditambah ayat harapan dan hikmah di saat yang pas.</div></button>
+<button class="c tap mode" data-m="penuh"><b>Islami penuh</b><div class="m">Murottal, dzikir, doa, dan ruqyah syar’iyyah sebagai pendamping.</div></button>
+<div class="m" style="text-align:center">Ayat dan doa menenangkan, tetapi bukan pengganti bantuan profesional bila kamu membutuhkannya.</div>
+<button class="b" id="start" style="margin-top:auto" disabled>Lanjut</button>
+</section>
+
+<section class="screen" id="home">
+<div><div class="m">Assalamu’alaikum, Rani</div><h1 class="h">Lagi gimana<br>hari ini?</h1></div>
+<div class="row" id="moods"></div>
+<div class="c" id="verse"></div>
+<div class="grid">
+<button class="c tap" onclick="go('chat')"><b>Curhat</b><div class="m">Ditemani teman AI kapan saja</div></button>
+<button class="c tap" onclick="go('calm')"><b>Napas &amp; dzikir</b><div class="m">3 menit menenangkan diri</div></button>
+<button class="c tap" onclick="go('focus')"><b>Fokus belajar</b><div class="m">Pecah skripsi jadi langkah kecil</div></button>
+<button class="c tap" onclick="go('hal')"><b>Halaqah sehat</b><div class="m">Lingkaran kecil yang saling menguatkan</div></button>
+</div>
+</section>
+
+<section class="screen" id="chat" style="padding-bottom:8px">
+<div><h1 class="h" style="font-size:22px">Teman Sakinah</h1><div class="m">Teman AI yang mendengarkan. Bukan pengganti psikolog.</div></div>
+<div id="log" style="display:flex;flex-direction:column;gap:12px;flex:1"></div>
+<div class="row" id="sugg"></div>
+</section>
+<form class="inp" id="form" style="display:none" onsubmit="send(event)">
+<input id="txt" placeholder="Tulis ceritamu..." aria-label="Tulis ceritamu" autocomplete="off">
+<button class="b" aria-label="Kirim">&gt;</button>
+</form>
+
+<section class="screen" id="calm" style="text-align:center">
+<h1 class="h">Napas &amp; dzikir</h1>
+<div class="m" id="calmsub">Ikuti ritme lingkaran. Tarik napas saat membesar, hembuskan saat mengecil.</div>
+<div class="orb" id="orb">Mulai</div>
+<div class="ar" id="dz" style="font-size:24px;min-height:50px"></div>
+<button class="b" id="calmbtn" onclick="toggleCalm()">Mulai 3 menit</button>
+</section>
+
+<section class="screen" id="focus">
+<h1 class="h">Fokus belajar</h1>
+<div class="m">Skripsi besar itu menakutkan. Pecah jadi langkah yang cukup kecil untuk dimulai hari ini.</div>
+<div class="c" id="tasks"></div>
+<div class="c"><b>Pomodoro 25 menit</b><div class="m">Belajar fokus, lalu istirahat 5 menit. Suara tenang opsional.</div></div>
+</section>
+
+<section class="screen" id="hal">
+<h1 class="h">Halaqah sehat</h1>
+<div class="m">Kelompok kecil 5 sampai 8 orang, dengan fasilitator terlatih. Tanpa papan peringkat.</div>
+<div class="c"><b>Mahasiswa Tingkat Akhir</b><div class="m">6 anggota · Kamis malam · Berbagi cerita skripsi</div><button class="b b2" style="margin-top:12px" onclick="this.textContent='Permintaan terkirim'">Gabung</button></div>
+<div class="c"><b>Perantau Berbagi Rindu</b><div class="m">8 anggota · Minggu sore · Rindu rumah dan kesepian</div><button class="b b2" style="margin-top:12px" onclick="this.textContent='Permintaan terkirim'">Gabung</button></div>
+<div class="c"><b>Buddy Check-in</b><div class="m">Dua orang saling menanyakan kabar dengan pesan singkat yang lembut.</div><button class="b b2" style="margin-top:12px" onclick="this.textContent='Mencari buddy...'">Cari buddy</button></div>
+</section>
+
+<section class="screen" id="me">
+<h1 class="h">Saya</h1>
+<div class="c"><b>Cara ditemani</b><div class="m" id="curmode"></div>
+<div class="row" style="margin-top:10px"><button class="chip" data-m="umum">Umum</button><button class="chip" data-m="ringan">Islami ringan</button><button class="chip" data-m="penuh">Islami penuh</button></div></div>
+<div class="c"><b>Privasi</b><div class="m">Datamu hanya terlihat olehmu. Kampus hanya melihat data agregat anonim. Bisa diekspor atau dihapus kapan saja.</div></div>
+<div class="c"><b>Kontak tepercaya</b><div class="m">Ibu · Sahabat · Dosen wali</div></div>
+<button class="x" onclick="resetAll()">Kembali ke awal demo</button>
+</section>
+
+<section class="screen crisis" id="crisis">
+<div style="margin-top:12px"><h1 class="h" style="font-size:30px">Kamu nggak<br>sendirian.</h1>
+<div class="m" style="margin-top:12px;font-size:15px">Perasaan seberat ini bisa terasa tanpa ujung, tapi ia bisa berubah. Kamu berharga, dan ada orang yang siap menemanimu sekarang.</div></div>
+<button class="b" style="min-height:56px" onclick="alert('Demo: di versi asli tombol ini menelepon layanan darurat resmi. [NOMOR RESMI] perlu diverifikasi sebelum rilis.')">Hubungi layanan darurat [NOMOR RESMI]</button>
+<button class="b b2" style="min-height:56px" onclick="alert('Demo: menelepon kontak tepercaya yang dipilih pengguna (misalnya Ibu).')">Telepon Ibu (kontak tepercayamu)</button>
+<button class="b b2" style="min-height:56px" onclick="alert('Demo: terhubung ke konselor manusia terlatih.')">Chat konselor manusia</button>
+<div class="c"><b>Rencana keselamatanku</b><div class="m">Tanda bahaya, hal yang menenangkan, dan orang yang bisa kamu hubungi.</div></div>
+<div class="row" style="margin-top:auto;justify-content:center"><button class="chip" id="crverse" onclick="this.textContent='Hati bisa tenang dengan mengingat Allah. Ar-Ra’d: 28'">Dengarkan ayat penenang (opsional)</button>
+<button class="x" onclick="go(prev||'home')">Aku sudah lebih tenang, kembali</button></div>
+</section>
+
+<nav class="nav" id="nav">
+<button data-s="home" class="on">Beranda</button><button data-s="chat">Curhat</button><button data-s="calm">Tenang</button><button data-s="hal">Halaqah</button><button data-s="me">Saya</button>
+</nav>
+</div>
+
+<script>
+var mode=null,prev='home',breathing=null,seeded=false;
+var $=function(i){return document.getElementById(i)};
+try{mode=localStorage.getItem('sk_mode')}catch(e){}
+var V={
+ Capek:["لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا","Allah tidak membebani seseorang di luar kesanggupannya. Al-Baqarah: 286","Capek itu valid. Coba istirahat 10 menit tanpa layar."],
+ Overthinking:["أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ","Dengan mengingat Allah, hati menjadi tenteram. Ar-Ra’d: 28","Tulis tiga pikiran yang berputar, lalu pisahkan mana yang bisa kamu kendalikan."],
+ Sepi:["فَإِنِّي قَرِيبٌ","Sesungguhnya Aku dekat. Al-Baqarah: 186","Kirim satu pesan singkat ke teman lama hari ini."],
+ "Tertekan skripsi":["فَإِنَّ مَعَ الْعُسْرِ يُسْرًا","Bersama kesulitan ada kemudahan. Al-Insyirah: 5","Targetkan satu paragraf saja hari ini. Kecil, tapi bergerak."],
+ "Baik-baik saja":["لَئِن شَكَرْتُمْ لَأَزِيدَنَّكُمْ","Jika kamu bersyukur, Aku akan menambah nikmat. Ibrahim: 7","Tulis satu hal kecil yang kamu syukuri hari ini."]
+};
+var cur="Overthinking";
+function renderVerse(){
+ var v=V[cur];
+ $('verse').innerHTML = mode==='umum'
+  ? '<div class="m g"><b>Untukmu hari ini</b></div><div style="margin:8px 0;font-weight:600">'+v[2]+'</div><div class="m">Satu langkah kecil, tanpa tekanan.</div>'
+  : '<div class="m g"><b>Untukmu hari ini</b></div><div class="ar" style="margin:8px 0">'+v[0]+'</div><div class="m">'+v[1]+'</div><div class="m g" style="margin-top:8px">Langkah kecil: '+v[2]+'</div>';
+}
+function renderMoods(){
+ $('moods').innerHTML='';
+ Object.keys(V).forEach(function(k){var b=document.createElement('button');b.className='chip'+(k===cur?' sel':'');b.textContent=k;b.onclick=function(){cur=k;renderMoods();renderVerse()};$('moods').appendChild(b)});
+}
+function go(s){
+ var now=document.querySelector('.screen.on');if(now&&now.id!=='crisis')prev=now.id;
+ document.querySelectorAll('.screen').forEach(function(e){e.classList.remove('on')});
+ $(s).classList.add('on');
+ var showNav=!(s==='onb'||s==='crisis');
+ $('nav').style.display=showNav?'flex':'none';
+ $('form').style.display=s==='chat'?'flex':'none';
+ document.querySelectorAll('.nav button').forEach(function(b){b.classList.toggle('on',b.dataset.s===s)});
+ if(s==='chat')seedChat();
+ if(s!=='calm'&&breathing)toggleCalm();
+ if(s==='me')$('curmode').textContent={umum:'Umum',ringan:'Islami ringan',penuh:'Islami penuh'}[mode]||'';
+ if(s==='calm')$('calmsub').textContent=mode==='umum'?'Ikuti ritme lingkaran. Tarik napas saat membesar, hembuskan saat mengecil.':'Ikuti ritme lingkaran sambil berdzikir dalam hati.';
+}
+document.querySelectorAll('.nav button').forEach(function(b){b.onclick=function(){go(b.dataset.s)}});
+function setMode(m){mode=m;try{localStorage.setItem('sk_mode',m)}catch(e){}renderVerse();$('curmode').textContent={umum:'Umum',ringan:'Islami ringan',penuh:'Islami penuh'}[m]}
+document.querySelectorAll('.mode').forEach(function(b){b.onclick=function(){document.querySelectorAll('.mode').forEach(function(x){x.classList.remove('sel')});b.classList.add('sel');mode=b.dataset.m;$('start').disabled=false}});
+$('start').onclick=function(){setMode(mode);go('home')};
+document.querySelectorAll('#me .chip[data-m]').forEach(function(b){b.onclick=function(){setMode(b.dataset.m)}});
+function resetAll(){try{localStorage.removeItem('sk_mode')}catch(e){}mode=null;seeded=false;$('log').innerHTML='';$('start').disabled=true;document.querySelectorAll('.mode').forEach(function(x){x.classList.remove('sel')});go('onb')}
+
+/* Curhat (simulasi) */
+var CR=/bunuh diri|ingin mati|pengen mati|mati aja|akhiri hidup|menyakiti diri|nyakitin diri|nggak mau hidup|ga mau hidup/i;
+function addB(t,c){var d=document.createElement('div');d.className='bub '+c;d.textContent=t;$('log').appendChild(d);$('log').lastChild.scrollIntoView({block:'end'});return d}
+function setSugg(a){$('sugg').innerHTML='';a.forEach(function(x){var b=document.createElement('button');b.className='chip';b.textContent=x[0];b.onclick=x[1];$('sugg').appendChild(b)})}
+function offer(){
+ var a=[["Latihan napas",function(){go('calm')}]];
+ if(mode!=='umum')a.push(["Satu ayat harapan",function(){addB(V[cur][1],'ai')}]);
+ a.push(["Bicara dengan konselor",function(){addB("Baik. Aku bisa bantu hubungkan kamu dengan konselor manusia. Di versi asli, kamu akan memilih jadwal atau chat langsung.",'ai')}]);
+ setSugg(a);
+}
+function seedChat(){if(seeded)return;seeded=true;addB("Hai Rani. Aku di sini. Mau cerita apa yang paling berat hari ini?",'ai');setSugg([["Skripsiku ditolak lagi",function(){say("Skripsiku ditolak lagi, rasanya aku nggak cukup pintar.")}],["Aku capek banget",function(){say("Aku capek banget akhir-akhir ini.")}],["Aku kesepian",function(){say("Aku kesepian di perantauan.")}]])}
+function reply(t){
+ if(CR.test(t)){addB("Terima kasih sudah jujur. Aku khawatir dan ingin kamu aman. Kamu nggak harus menghadapi ini sendirian. Aku bukakan bantuan yang bisa kamu hubungi sekarang.",'ai');setTimeout(function(){go('crisis')},1400);return}
+ var r;
+ if(/skripsi|revisi|dosen|sidang/i.test(t))r="Ditolak lagi itu melelahkan, wajar kalau kamu merasa kecil. Revisi bukan ukuran kecerdasanmu. Bagian mana yang paling bikin sesak?";
+ else if(/sepi|sendiri|rindu|rantau/i.test(t))r="Jauh dari rumah memang bisa terasa sunyi. Perasaan itu manusiawi. Kapan terakhir kamu ngobrol dengan orang yang kamu sayang?";
+ else if(/capek|lelah|burnout|begadang/i.test(t))r="Kedengarannya kamu sudah memikul banyak hal. Kamu boleh berhenti sebentar. Tidurmu belakangan bagaimana?";
+ else r="Aku dengar kamu. Terima kasih sudah mau cerita. Boleh ceritakan lebih banyak, apa yang paling kamu rasakan sekarang?";
+ var d=addB('...','ai');setTimeout(function(){d.textContent=r;offer()},700);
+}
+function say(t){addB(t,'me');setSugg([]);reply(t)}
+function send(e){e.preventDefault();var v=$('txt').value.trim();if(!v)return;$('txt').value='';say(v)}
+
+/* Napas */
+var phase=true,left=180;
+function toggleCalm(){
+ var o=$('orb');
+ if(breathing){clearInterval(breathing);breathing=null;o.classList.remove('big');o.textContent='Mulai';$('dz').textContent='';$('calmbtn').textContent='Mulai 3 menit';return}
+ left=180;$('calmbtn').textContent='Berhenti';phase=true;tick();
+ breathing=setInterval(tick,4000);
+}
+function tick(){
+ var o=$('orb');
+ if(left<=0){toggleCalm();o.textContent='Selesai';return}
+ o.classList.toggle('big',phase);o.textContent=phase?'Tarik napas':'Hembuskan';
+ if(mode!=='umum')$('dz').textContent=phase?'سُبْحَانَ اللَّهِ':'الْحَمْدُ لِلَّهِ';
+ phase=!phase;left-=4;
+}
+
+/* Tugas */
+var T=["Buka dokumen dan baca ulang catatan revisi","Tulis satu paragraf perbaikan","Kirim pertanyaan singkat ke dosen pembimbing"];
+$('tasks').innerHTML=T.map(function(t,i){return '<label style="display:flex;gap:12px;align-items:center;min-height:48px;font-size:14px"><input type="checkbox" style="width:22px;height:22px;accent-color:#E8C27A">'+t+'</label>'}).join('');
+
+renderMoods();renderVerse();
+if(mode){var s=document.querySelector('.mode[data-m="'+mode+'"]');if(s){s.classList.add('sel');$('start').disabled=false}}
+</script>
+</body>
+</html>
